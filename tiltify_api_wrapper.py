@@ -10,10 +10,11 @@ class Tiltify:
     Wrapper class for the Tiltify API
     """
 
-    __API_URL = "https://v5api.tiltify.com/api/public/"
+    __API_URL = "https://v5api.tiltify.com/api/public"
 
-    def __init__(self):
+    def __init__(self, campaign_id):
         self.__setup_environment_variables()
+        self.campaign_id = campaign_id
 
     def __setup_environment_variables(self):
         """
@@ -25,3 +26,13 @@ class Tiltify:
             raise EnvironmentError("Missing TILTIFY_CLIENT_ID in .env")
         elif self.__CLIENT_SECRET is None:
             raise EnvironmentError("Missing TILTIFY_CLIENT_SECRET in .env")
+
+    def list_donations(self, completed_before, completed_after):
+        """
+        List all the donations between two dates.
+
+        :param completed_before: An ISO Date String representing the start of the date range to fetch donations from.
+        :param completed_after: An ISO Date String representing the end of the date range to fetch donations from.
+        :return: A list of objects representing the donations in the given date range.
+        """
+        url = f"{Tiltify.__API_URL}/campaigns/{self.campaign_id}/donations"
