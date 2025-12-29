@@ -1,3 +1,8 @@
+import csv
+
+from structure import Structure
+
+
 class ServerInterfacer:
     """
     Interface for interacting with the Minecraft server
@@ -12,3 +17,4 @@ class ServerInterfacer:
 
     def show_title(self, title: str):
         print(f"show_title({title})")
+

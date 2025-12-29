@@ -1,4 +1,7 @@
 from currency_converter import CurrencyConverter
+from donation import Donation
+from server_interfacer import ServerInterfacer
+from structure import Structure
 from tiltify_api_wrapper import Tiltify
 
 class Main:
@@ -7,10 +10,14 @@ class Main:
     GBP_PER_BLOCK = 1
 
     def __init__(self):
-        tiltify = Tiltify(Main.CAMPAIGN_ID)
-        donations = tiltify.list_donations("", "")
-        print(len(donations))
+        self.tiltify = Tiltify(Main.CAMPAIGN_ID)
+        structures = Structure.get_structure_list("assets/structures.csv")
+        Donation.get_all_donations(Main.CAMPAIGN_ID)
+        #self.get_donations()
 
+    def get_donations(self):
+        donations = self.tiltify.list_donations("", "")
+        print(len(donations))
         converter = CurrencyConverter("gbp")
         for donation in donations:
             print(f"{donation.get("donor_name")}" +

@@ -52,7 +52,7 @@ class Tiltify:
         else:
             return response.json()["access_token"]
 
-    def list_donations(self, completed_before, completed_after):
+    def list_donations(self, completed_before = "", completed_after = ""):
         """
         List all the donations between two dates.
 
