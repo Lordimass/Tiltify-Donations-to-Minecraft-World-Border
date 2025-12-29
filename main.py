@@ -1,15 +1,15 @@
 import threading
 import time
 from typing import List
-
-import server_interfacer
-from currency_converter import CurrencyConverter
 from donation import Donation
 from server_interfacer import ServerInterfacer
 from structure import Structure
 from tiltify_api_wrapper import Tiltify
 
 class Main:
+    SERVER_HOST_IP = "192.168.30.35"
+    SERVER_HOST_PORT = 25575
+
     CAMPAIGN_ID = "d36d4806-dc16-4d4d-917d-1df450da39ce"  # Fake ID for testing
     # CAMPAIGN_ID = "f7b5df80-5148-42ed-8ae6-6588e0d72aaa" # Production Campaign ID
     GBP_PER_BLOCK = 1
@@ -17,7 +17,7 @@ class Main:
 
     def __init__(self):
         self.tiltify = Tiltify(Main.CAMPAIGN_ID)
-        self.server_interfacer = ServerInterfacer()
+        self.server_interfacer = ServerInterfacer(Main.SERVER_HOST_IP, Main.SERVER_HOST_PORT)
 
         self.structures = Structure.get_structure_list("assets/structures.csv")
         self.donations: List[Donation] = Donation.get_all_donations(Main.CAMPAIGN_ID)
@@ -45,7 +45,9 @@ class Main:
                 self.server_interfacer.announce_donation(fresh_dono)
                 self.total_raised += fresh_dono.gbp_amount
         self.donations = fresh_donos
-        self.server_interfacer.set_world_border(self.total_raised / Main.GBP_PER_BLOCK)
+
+        if len(new_donos) > 0:
+            self.server_interfacer.set_world_border(self.total_raised / Main.GBP_PER_BLOCK)
 
         time.sleep(Main.TIME_BETWEEN_DONATION_CHECKS)
         threading.Thread(target=self.check_donations())
