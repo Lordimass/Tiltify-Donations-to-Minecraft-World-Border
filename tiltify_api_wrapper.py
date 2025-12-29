@@ -1,9 +1,6 @@
-import json
 import os
-
 import requests
 from dotenv import load_dotenv
-from urllib3.util import Url
 
 # Load environment variables from `.env`
 load_dotenv()

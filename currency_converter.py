@@ -1,6 +1,5 @@
 import requests
 
-
 class CurrencyConverter:
     """
     Utility class to convert between currencies.
@@ -16,18 +15,10 @@ class CurrencyConverter:
         self.from_currency = from_currency.lower()
         self.rates = data[self.from_currency]
 
-    def convert(self, to_currency, amount):
+    def convert(self, to_currency: str, amount: float) -> float:
         """Convert amount to another currency."""
-        initial_amount = amount
+        return round(amount * self.rates[to_currency.lower()], 2)
 
-        # Convert to target currency
-        amount = round(amount * self.rates[to_currency.lower()], 2)
-        print(f"{initial_amount} {self.from_currency} = {amount} {to_currency.lower()}")
-
-    def convert_backwards(self, from_currency, amount):
+    def convert_backwards(self, from_currency: str, amount: float) -> float:
         """Convert amount from another currency to the base currency."""
-        initial_amount = amount
-
-        # Convert from to target currency
-        amount = round(amount / self.rates[from_currency.lower()], 2)
-        return amount
+        return round(amount / self.rates[from_currency.lower()], 2)
