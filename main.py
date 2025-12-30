@@ -10,9 +10,8 @@ class Main:
     SERVER_HOST_IP = "192.168.30.35"
     SERVER_HOST_PORT = 25575
 
-    CAMPAIGN_ID = "d36d4806-dc16-4d4d-917d-1df450da39ce"  # Fake ID for testing
-    # CAMPAIGN_ID = "f7b5df80-5148-42ed-8ae6-6588e0d72aaa" # Production Campaign ID
-    GBP_PER_BLOCK = 1
+    CAMPAIGN_ID = "f7b5df80-5148-42ed-8ae6-6588e0d72aaa"
+    GBP_PER_BLOCK = 20
     TIME_BETWEEN_DONATION_CHECKS = 10
 
     def __init__(self):
@@ -25,6 +24,7 @@ class Main:
         self.total_raised = Donation.get_total_raised(self.donations)
 
         self.server_interfacer.set_world_border(self.total_raised / Main.GBP_PER_BLOCK)
+        self.server_interfacer.announce_donation(self.donations[-1])
 
         time.sleep(Main.TIME_BETWEEN_DONATION_CHECKS)
         threading.Thread(target=self.check_donations())
@@ -48,6 +48,8 @@ class Main:
 
         if len(new_donos) > 0:
             self.server_interfacer.set_world_border(self.total_raised / Main.GBP_PER_BLOCK)
+        else:
+            print("Found no new donations.")
 
         time.sleep(Main.TIME_BETWEEN_DONATION_CHECKS)
         threading.Thread(target=self.check_donations())
