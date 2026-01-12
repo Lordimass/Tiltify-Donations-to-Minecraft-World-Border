@@ -20,11 +20,11 @@ class ServerInterfacer:
     def set_world_border(self, size: int):
         print(f"set_world_border({size})")
         self.__mcr.command(f"/worldborder set {size}")
-        self.title(f"\"World Border is now {round(size)} blocks wide!\"")
+        self.title(f"\"World Border is now {round(size)} blocks wide!\"", "subtitle")
 
     def announce_donation(self, donation: Donation):
         amount = format(donation.gbp_amount, ".2f")
-        self.title('["",{"text":"' + donation.name + '","bold":true,"color":"dark_aqua"},{"text":" donated "},{"text":"£' + amount + '","bold":true,"color":"gold"},{"text":"!","bold":true},{"text":" Thank you!"}]', "subtitle")
+        self.title('["",{"text":"' + donation.name + '","bold":true,"color":"dark_aqua"},{"text":" donated "},{"text":"£' + amount + '","bold":true,"color":"gold"},{"text":"!","bold":true},{"text":" Thank you!"}]')
         self.__mcr.command('/tellraw @a ["",{"text":"' + donation.name + '","bold":true,"color":"dark_aqua"},{"text":" donated "},{"text":"£' + amount + '","bold":true,"color":"gold"},{"text":"!","bold":true},{"text":" Thank you!"}]')
 
     def title(self, component, detail = "title", targets = "@a"):

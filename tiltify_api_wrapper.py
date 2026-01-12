@@ -32,8 +32,9 @@ class Tiltify:
         Generate a new Application Access Token
         :return: The application access token
         """
+        url = f"{Tiltify.__API_URL}oauth/token"
         response = requests.post(
-            f"{Tiltify.__API_URL}oauth/token",
+            url,
             headers={
                 "Content-Type": "application/json"
             },
@@ -45,7 +46,7 @@ class Tiltify:
             }
         )
         if not response.ok:
-            raise RuntimeError(f"Response when fetching application access token was not OK:\n{response}")
+            raise RuntimeError(f"Response when fetching application access token from {url} was not OK:\n{response.json()}")
         else:
             return response.json()["access_token"]
 
@@ -58,14 +59,15 @@ class Tiltify:
         :return: A list of objects representing the donations in the given date range.
         """
         access_token = self.__get_application_access_token()
+        url = f"{Tiltify.__API_URL}api/public/team_campaigns/{self.campaign_id}/donations?completed_before={completed_before}&completed_after={completed_after}&limit=100"
         response = requests.get(
-            f"{Tiltify.__API_URL}api/public/campaigns/{self.campaign_id}/donations?completed_before={completed_before}&completed_after={completed_after}&limit=100",
+            url,
             headers={
                 "Authorization": f"Bearer {access_token}"
             }
         )
         if not response.ok:
-            raise RuntimeError(f"Response when fetching donation list was not OK:\n{response}")
+            raise RuntimeError(f"Response when fetching donation list from {url} was not OK:\n{response}")
         elif response.json().get("metadata").get("after") is not None:
             return response.json().get("data") + self.__list_donations_after(
                 response.json().get("metadata").get("after"),
@@ -75,14 +77,15 @@ class Tiltify:
             return response.json().get("data")
 
     def __list_donations_after(self, after, access_token):
+        url = f"{Tiltify.__API_URL}api/public/team_campaigns/{self.campaign_id}/donations?after={after}&limit=100"
         response = requests.get(
-            f"{Tiltify.__API_URL}api/public/campaigns/{self.campaign_id}/donations?after={after}&limit=100",
+            url,
             headers={
                 "Authorization": f"Bearer {access_token}"
             }
         )
         if not response.ok:
-            raise RuntimeError(f"Response when fetching donation list was not OK:\n{response}")
+            raise RuntimeError(f"Response when fetching donation list from {url} was not OK:\n{response}")
         elif response.json().get("metadata").get("after") is not None:
             return response.json().get("data") + self.__list_donations_after(
                 response.json().get("metadata").get("after"),
