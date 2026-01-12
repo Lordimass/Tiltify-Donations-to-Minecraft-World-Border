@@ -19,7 +19,8 @@ class Main:
         self.tiltify = Tiltify(Main.CAMPAIGN_ID)
         self.server_interfacer = ServerInterfacer(Main.SERVER_HOST_IP, Main.SERVER_HOST_PORT)
 
-        self.structures = Structure.get_structure_list("assets/structures.csv")
+        # NOT IMPLEMENTED
+        #self.structures = Structure.get_structure_list("assets/structures.csv")
         self.donations: List[Donation] = Donation.get_all_donations(Main.CAMPAIGN_ID)
 
         self.total_raised = Donation.get_total_raised(self.donations)
